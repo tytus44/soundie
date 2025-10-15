@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soundie - Loading</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #1a1644 50%, #24183f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e0e6f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .splash-container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .title-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .title {
+            font-family: 'Pacifico', cursive;
+            font-size: 5rem;
+            color: #6dd5ed;
+            text-shadow: 0 0 30px rgba(109, 213, 237, 0.8);
+            animation: titleAppear 1.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes titleAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .sound-wave {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border: 3px solid rgba(109, 213, 237, 0.6);
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .sound-wave:nth-child(1) {
+            animation: wave 2s ease-out 1s infinite;
+        }
+
+        .sound-wave:nth-child(2) {
+            animation: wave 2s ease-out 1.4s infinite;
+        }
+
+        .sound-wave:nth-child(3) {
+            animation: wave 2s ease-out 1.8s infinite;
+        }
+
+        .sound-wave:nth-child(4) {
+            animation: wave 2s ease-out 2.2s infinite;
+        }
+
+        @keyframes wave {
+            0% {
+                width: 100px;
+                height: 100px;
+                opacity: 0.8;
+            }
+            100% {
+                width: 500px;
+                height: 500px;
+                opacity: 0;
+            }
+        }
+
+        .glow-pulse {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(109, 213, 237, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: glowPulse 2s ease-in-out 1s infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.3);
+                opacity: 0.8;
+            }
+        }
+
+        .credits {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #8b9dc3;
+            animation: creditsAppear 1.5s ease-out 1.5s forwards;
+            opacity: 0;
+        }
+
+        @keyframes creditsAppear {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .credits .heart {
+            color: #ff4757;
+            font-size: 1rem;
+            display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+        }
+
+        .credits a {
+            color: #6dd5ed;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .credits a:hover {
+            color: #48cae4;
+            text-shadow: 0 0 10px rgba(109, 213, 237, 0.5);
+        }
+
+        .fade-out {
+            animation: fadeOut 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars-container" id="starsContainer"></div>
+
+    <div class="splash-container">
+        <div class="title-wrapper">
+            <div class="glow-pulse"></div>
+            <div class="sound-wave"></div>
+            <div class="sound-wave"></div>
+            <div class="sound-wave"></div>
+            <div class="sound-wave"></div>
+            <h1 class="title">Soundie</h1>
+            <div class="credits">
+                Programmato con <span class="heart">❤</span> da <a href="https://github.com/tytus44/" target="_blank">NeRO</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate starfield (same as Soundie.html)
+        function createStarfield() {
+            const container = document.getElementById('starsContainer');
+            const numStars = 200;
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = Math.random() * 3 + 0.5;
+                const duration = Math.random() * 3 + 2;
+                const delay = Math.random() * 5;
+                
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDuration = `${duration}s`;
+                star.style.animationDelay = `${delay}s`;
+                
+                if (size > 2) {
+                    star.style.boxShadow = `0 0 ${size * 2}px rgba(255, 255, 255, 0.8)`;
+                }
+                
+                container.appendChild(star);
+            }
+        }
+
+        // Initialize starfield
+        createStarfield();
+
+        // Fade out and redirect to Soundie.html after 5 seconds
+        setTimeout(() => {
+            document.body.classList.add('fade-out');
+        }, 4200); // Start fade-out at 4.2s
+
+        setTimeout(() => {
+            window.location.href = 'Soundie.html';
+        }, 5000); // Redirect at 5s
+    </script>
+</body>
+</html>
