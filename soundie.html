@@ -25,9 +25,10 @@
             padding: 40px 20px;
             color: #e0e6f0;
             position: relative;
+            overflow-x: hidden; 
         }
 
-        /* Stilizzazione scrollbar */
+        /* Stilizzazione scrollbar (Traccia già trasparente) */
         ::-webkit-scrollbar {
             width: 18px;
         }
@@ -45,7 +46,7 @@
             background: #5bc5dd;
         }
 
-        /* Firefox */
+        /* Firefox (Traccia già trasparente) */
         * {
             scrollbar-width: auto;
             scrollbar-color: #6dd5ed transparent;
@@ -294,7 +295,8 @@
             -webkit-appearance: none;
             width: 120px;
             height: 6px;
-            background: transparent;
+            /* --- MODIFICA: Ripristinata la traccia --- */
+            background: rgba(255, 255, 255, 0.1); 
             border-radius: 5px;
             outline: none;
             transform: rotate(-90deg);
@@ -307,7 +309,6 @@
             border-radius: 50%;
             background: #6dd5ed;
             cursor: pointer;
-            /* --- MODIFICA --- box-shadow rimosso --- */
             box-shadow: none;
         }
 
@@ -318,7 +319,6 @@
             background: #6dd5ed;
             cursor: pointer;
             border: none;
-            /* --- MODIFICA --- box-shadow rimosso --- */
             box-shadow: none;
         }
         /* --- FINE STILI VOLUME --- */
@@ -529,14 +529,14 @@
 
         <div class="sound-item" data-sound="sounds/pioggia-auto.mp3" data-class="rain-car">
             <div class="sound-circle rain-car">
-                <img src="gif/pioggia-auto.gif" alt="Pioggia in Auto">
+                <img src="gif/piogga-auto.gif" alt="Pioggia in Auto">
             </div>
             <div class="sound-name">Pioggia in Auto</div>
         </div>
 
         <div class="sound-item" data-sound="sounds/pioggia-ombrello.mp3" data-class="rain-umbrella">
             <div class="sound-circle rain-umbrella">
-                <img src="gif/pioggia-ombrello.gif" alt="Pioggia Ombrello">
+                <img src="gif/piogga-ombrello.gif" alt="Pioggia Ombrello">
             </div>
             <div class="sound-name">Pioggia Ombrello</div>
         </div>
@@ -643,15 +643,9 @@
             <div class="sound-circle paper">
                 <img src="gif/carta.gif" alt="Carta">
             </div>
-            <div class="sound-name">Carta</div>
+            <div classs="sound-name">Carta</div>
         </div>
-
-        <div class="sound-item" data-sound="sounds/lavanderia.mp3" data-class="laundry">
-            <div class="sound-circle laundry">
-                <img src="gif/lavanderia.gif" alt="Lavanderia">
-            </div>
-            <div class="sound-name">Lavanderia</div>
-        </div>
+        
     </div>
 
     <script>
