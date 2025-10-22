@@ -189,6 +189,13 @@
             text-shadow: 0 0 10px rgba(109, 213, 237, 0.5);
         }
 
+        /* ===== NUOVA REGOLA CSS AGGIUNTA ===== */
+        .credits .icon-credits {
+            margin-top: 8px;
+            font-size: 0.8rem;
+        }
+        /* ==================================== */
+
         .fade-out {
             animation: fadeOut 0.8s ease-out forwards;
         }
@@ -219,7 +226,11 @@
             <h1 class="title">Soundie</h1>
             <div class="credits">
                 Programmato con <span class="heart">❤</span> da <a href="https://github.com/tytus44/" target="_blank">NeRO</a>
-            </div>
+                
+                <p class="icon-credits">
+                    Icone animate di <a href="https://www.flaticon.com/" target="_blank">Flaticon</a>
+                </p>
+                </div>
         </div>
     </div>
 
@@ -257,13 +268,13 @@
         // Initialize starfield
         createStarfield();
 
-        // Fade out and redirect to Soundie.html after 5 seconds
+        // Fade out and redirect to soundie.html after 5 seconds
         setTimeout(() => {
             document.body.classList.add('fade-out');
         }, 4200); // Start fade-out at 4.2s
 
         setTimeout(() => {
-            window.location.href = 'Soundie.html';
+            window.location.href = 'soundie.html';
         }, 5000); // Redirect at 5s
     </script>
 </body>

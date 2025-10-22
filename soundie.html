@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soundie - Ambient Sounds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #1a1644 50%, #24183f 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            color: #e0e6f0;
+            position: relative;
+        }
+
+        /* Stilizzazione scrollbar */
+        ::-webkit-scrollbar {
+            width: 18px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #6dd5ed;
+            border-radius: 9px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5bc5dd;
+        }
+
+        /* Firefox */
+        * {
+            scrollbar-width: auto;
+            scrollbar-color: #6dd5ed transparent;
+        }
+
+        .stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 400;
+            font-family: 'Pacifico', cursive;
+            letter-spacing: 3px;
+            color: #6dd5ed;
+            text-shadow: 0 0 20px rgba(109, 213, 237, 0.3);
+        }
+
+        .header p {
+            color: #8b9dc3;
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+
+        .sound-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 25px;
+            max-width: 1100px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 50px;
+        }
+
+        .sound-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .sound-item:hover {
+            transform: scale(1.05);
+        }
+
+        .sound-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: visible;
+            background: white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .sound-circle::before {
+            content: '';
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #6dd5ed;
+            border-right-color: #6dd5ed;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sound-circle.playing::before {
+            opacity: 1;
+            animation: rotate-ring 2s linear infinite;
+        }
+
+        @keyframes rotate-ring {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .sound-circle img {
+            width: 70%;
+            height: 70%;
+            position: relative;
+            z-index: 2;
+            object-fit: contain;
+        }
+
+        .sound-name {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #b8c5db;
+            text-align: center;
+        }
+
+        .playing {
+            box-shadow: 0 0 30px rgba(109, 213, 237, 0.6), 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #8b9dc3;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer .heart {
+            color: #ff4757;
+            font-size: 1rem;
+            display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .sound-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .controls-top {
+                top: 10px;
+                right: 10px;
+                gap: 8px;
+            }
+
+            .control-btn {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* Controlli in alto a destra */
+        .controls-top {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .control-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(109, 213, 237, 0.15);
+            border: 2px solid #6dd5ed;
+            color: #6dd5ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(109, 213, 237, 0.3);
+            transform: scale(1.1);
+        }
+
+        .control-btn.active {
+            background: #6dd5ed;
+            color: #0f0c29;
+        }
+
+        .control-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* --- STILI CONTROLLO VOLUME --- */
+        .volume-control-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .volume-slider-popup {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            top: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 160px;
+            background: transparent;
+            backdrop-filter: none;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .volume-control-container:hover .volume-slider-popup {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .volume-slider-vertical {
+            -webkit-appearance: none;
+            width: 120px;
+            height: 6px;
+            background: transparent;
+            border-radius: 5px;
+            outline: none;
+            transform: rotate(-90deg);
+        }
+
+        .volume-slider-vertical::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #6dd5ed;
+            cursor: pointer;
+            /* --- MODIFICA --- box-shadow rimosso --- */
+            box-shadow: none;
+        }
+
+        .volume-slider-vertical::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #6dd5ed;
+            cursor: pointer;
+            border: none;
+            /* --- MODIFICA --- box-shadow rimosso --- */
+            box-shadow: none;
+        }
+        /* --- FINE STILI VOLUME --- */
+
+
+        /* Modale Timer */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1644 0%, #24183f 100%);
+            border: 2px solid #6dd5ed;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 50px rgba(109, 213, 237, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            color: #6dd5ed;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #6dd5ed;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: rgba(109, 213, 237, 0.2);
+        }
+
+        .timer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .timer-preset {
+            background: rgba(109, 213, 237, 0.1);
+            border: 2px solid #6dd5ed;
+            border-radius: 12px;
+            padding: 15px;
+            color: #e0e6f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .timer-preset:hover {
+            background: rgba(109, 213, 237, 0.2);
+            transform: translateX(5px);
+        }
+
+        .timer-preset.active {
+            background: #6dd5ed;
+            color: #0f0c29;
+            font-weight: bold;
+        }
+
+        .timer-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .timer-btn {
+            flex: 1;
+            background: #6dd5ed;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            color: #0f0c29;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .timer-btn:hover {
+            background: #5bc5dd;
+            transform: translateY(-2px);
+        }
+
+        .timer-status {
+            margin-top: 15px;
+            text-align: center;
+            color: #8b9dc3;
+            font-size: 0.9rem;
+        }
+
+        .timer-status.active {
+            color: #6dd5ed;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars-container" id="starsContainer"></div>
+
+    <div class="controls-top">
+        
+        <div class="volume-control-container">
+            <button class="control-btn" id="muteBtn" title="Muto/Audio">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+            </button>
+            
+            <div class="volume-slider-popup">
+                <input type="range" id="masterVolume" class="volume-slider-vertical" min="0" max="100" value="70">
+            </div>
+        </div>
+        
+        <button class="control-btn" id="timerBtn" title="Timer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+        </button>
+        <button class="control-btn" id="fullscreenBtn" title="Schermo Intero">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div class="modal-overlay" id="timerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Imposta Timer</h2>
+                <button class="close-modal" id="closeModal">×</button>
+            </div>
+            <div class="timer-options">
+                <div class="timer-preset" data-minutes="15">15 minuti</div>
+                <div class="timer-preset" data-minutes="30">30 minuti</div>
+                <div class="timer-preset" data-minutes="60">1 ora</div>
+                <div class="timer-preset" data-minutes="120">2 ore</div>
+            </div>
+            <div class="timer-actions">
+                <button class="timer-btn" id="startTimer">Imposta Timer</button>
+            </div>
+            <div class="timer-status" id="timerStatus"></div>
+        </div>
+    </div>
+
+    <div class="header">
+        <h1>Soundie</h1>
+        <p>Suoni ambientali rilassanti</p>
+    </div>
+
+    <div class="sound-grid">
+        <div class="sound-item" data-sound="sounds/piogga-leggera.mp3" data-class="rain-light">
+            <div class="sound-circle rain-light">
+                <img src="gif/piogga-leggera.gif" alt="Pioggia Leggera">
+            </div>
+            <div class="sound-name">Pioggia Leggera</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/pioggia-forte.mp3" data-class="rain-heavy">
+            <div class="sound-circle rain-heavy">
+                <img src="gif/pioggia-forte.gif" alt="Pioggia Forte">
+            </div>
+            <div class="sound-name">Pioggia Forte</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/pioggia-tuono.mp3" data-class="thunder">
+            <div class="sound-circle thunder">
+                <img src="gif/pioggia-tuono.gif" alt="Tuono">
+            </div>
+            <div class="sound-name">Tuono</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/pioggia-auto.mp3" data-class="rain-car">
+            <div class="sound-circle rain-car">
+                <img src="gif/pioggia-auto.gif" alt="Pioggia in Auto">
+            </div>
+            <div class="sound-name">Pioggia in Auto</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/pioggia-ombrello.mp3" data-class="rain-umbrella">
+            <div class="sound-circle rain-umbrella">
+                <img src="gif/pioggia-ombrello.gif" alt="Pioggia Ombrello">
+            </div>
+            <div class="sound-name">Pioggia Ombrello</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/onde.mp3" data-class="waves">
+            <div class="sound-circle waves">
+                <img src="gif/onde.gif" alt="Onde">
+            </div>
+            <div class="sound-name">Onde</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/fuoco.mp3" data-class="fire">
+            <div class="sound-circle fire">
+                <img src="gif/fuoco.gif" alt="Fuoco">
+            </div>
+            <div class="sound-name">Fuoco</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/bosco.mp3" data-class="forest">
+            <div class="sound-circle forest">
+                <img src="gif/bosco.gif" alt="Bosco">
+            </div>
+            <div class="sound-name">Bosco</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/fiume.mp3" data-class="river">
+            <div class="sound-circle river">
+                <img src="gif/fiume.gif" alt="Fiume">
+            </div>
+            <div class="sound-name">Fiume</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/subacqueo.mp3" data-class="underwater">
+            <div class="sound-circle underwater">
+                <img src="gif/subacqueo.gif" alt="Subacqueo">
+            </div>
+            <div class="sound-name">Subacqueo</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/cavallo.mp3" data-class="horse">
+            <div class="sound-circle horse">
+                <img src="gif/cavallo.gif" alt="Cavallo">
+            </div>
+            <div class="sound-name">Cavallo</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/rana.mp3" data-class="frog">
+            <div class="sound-circle frog">
+                <img src="gif/rana.gif" alt="Rana">
+            </div>
+            <div class="sound-name">Rana</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/neve.mp3" data-class="snow">
+            <div class="sound-circle snow">
+                <img src="gif/neve.gif" alt="Neve">
+            </div>
+            <div class="sound-name">Neve</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/treno.mp3" data-class="train">
+            <div class="sound-circle train">
+                <img src="gif/treno.gif" alt="Treno">
+            </div>
+            <div class="sound-name">Treno</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/metro.mp3" data-class="metro">
+            <div class="sound-circle metro">
+                <img src="gif/metro.gif" alt="Metro">
+            </div>
+            <div class="sound-name">Metro</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/bar.mp3" data-class="bar">
+            <div class="sound-circle bar">
+                <img src="gif/bar.gif" alt="Bar">
+            </div>
+            <div class="sound-name">Bar</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/tastiera.mp3" data-class="keyboard">
+            <div class="sound-circle keyboard">
+                <img src="gif/tastiera.gif" alt="Tastiera">
+            </div>
+            <div class="sound-name">Tastiera</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/macchinadascrivere.mp3" data-class="typewriter">
+            <div class="sound-circle typewriter">
+                <img src="gif/macchinadascrivere.gif" alt="Macchina da Scrivere">
+            </div>
+            <div class="sound-name">Macchina da Scrivere</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/vinile.mp3" data-class="vinyl">
+            <div class="sound-circle vinyl">
+                <img src="gif/vinile.gif" alt="Vinile">
+            </div>
+            <div class="sound-name">Vinile</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/carta.mp3" data-class="paper">
+            <div class="sound-circle paper">
+                <img src="gif/carta.gif" alt="Carta">
+            </div>
+            <div class="sound-name">Carta</div>
+        </div>
+
+        <div class="sound-item" data-sound="sounds/lavanderia.mp3" data-class="laundry">
+            <div class="sound-circle laundry">
+                <img src="gif/lavanderia.gif" alt="Lavanderia">
+            </div>
+            <div class="sound-name">Lavanderia</div>
+        </div>
+    </div>
+
+    <script>
+        // Generate starfield
+        function createStarfield() {
+            const container = document.getElementById('starsContainer');
+            const numStars = 200;
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = Math.random() * 3 + 0.5;
+                const baseOpacity = Math.random() * 0.5 + 0.3;
+                const duration = Math.random() * 3 + 2;
+                const delay = Math.random() * 5;
+                
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDuration = `${duration}s`;
+                star.style.animationDelay = `${delay}s`;
+                
+                if (size > 2) {
+                    star.style.boxShadow = `0 0 ${size * 2}px rgba(255, 255, 255, 0.8)`;
+                }
+                
+                container.appendChild(star);
+            }
+        }
+
+        class SoundPlayer {
+            constructor() {
+                this.sounds = new Map();
+                this.masterVolume = 0.7;
+                this.isMuted = false;
+                this.previousVolume = 0.7;
+                this.timerInterval = null;
+                this.timerEndTime = null;
+                this.init();
+                this.initControls();
+            }
+
+            init() {
+                document.querySelectorAll('.sound-item').forEach(item => {
+                    const soundPath = item.dataset.sound;
+                    const soundClass = item.dataset.class;
+                    const circle = item.querySelector('.sound-circle');
+                    
+                    const audio = new Audio(soundPath);
+                    audio.loop = true;
+                    audio.volume = this.masterVolume;
+                    
+                    this.sounds.set(item, {
+                        audio: audio,
+                        circle: circle,
+                        class: soundClass,
+                        playing: false
+                    });
+
+                    item.addEventListener('click', () => this.toggleSound(item));
+                });
+
+                const volumeSlider = document.getElementById('masterVolume');
+                volumeSlider.value = this.masterVolume * 100;
+
+                volumeSlider.addEventListener('input', (e) => {
+                    this.masterVolume = e.target.value / 100;
+                    
+                    if (this.masterVolume > 0 && this.isMuted) {
+                        this.isMuted = false;
+                        this.updateMuteButtonIcon(false);
+                    } else if (this.masterVolume == 0 && !this.isMuted) {
+                        this.isMuted = true;
+                        this.updateMuteButtonIcon(true);
+                    }
+
+                    this.sounds.forEach(sound => {
+                        sound.audio.volume = this.masterVolume;
+                    });
+                });
+            }
+
+            initControls() {
+                // Mute button
+                const muteBtn = document.getElementById('muteBtn');
+                muteBtn.addEventListener('click', () => this.toggleMute());
+
+                // Timer button
+                const timerBtn = document.getElementById('timerBtn');
+                timerBtn.addEventListener('click', () => this.openTimerModal());
+
+                // Fullscreen button
+                const fullscreenBtn = document.getElementById('fullscreenBtn');
+                fullscreenBtn.addEventListener('click', () => this.toggleFullscreen());
+
+                // Timer modal
+                const closeModal = document.getElementById('closeModal');
+                const timerModal = document.getElementById('timerModal');
+                closeModal.addEventListener('click', () => timerModal.classList.remove('show'));
+                timerModal.addEventListener('click', (e) => {
+                    if (e.target === timerModal) timerModal.classList.remove('show');
+                });
+
+                // Timer presets
+                document.querySelectorAll('.timer-preset').forEach(preset => {
+                    preset.addEventListener('click', () => {
+                        document.querySelectorAll('.timer-preset').forEach(p => p.classList.remove('active'));
+                        preset.classList.add('active');
+                    });
+                });
+
+                // Start timer
+                document.getElementById('startTimer').addEventListener('click', () => this.startTimer());
+            }
+
+            updateMuteButtonIcon(isMuted) {
+                const muteBtn = document.getElementById('muteBtn');
+                if (isMuted) {
+                    muteBtn.classList.add('active');
+                    muteBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <line x1="23" y1="9" x2="17" y2="15"></line>
+                        <line x1="17" y1="9" x2="23" y2="15"></line>
+                    </svg>`;
+                } else {
+                    muteBtn.classList.remove('active');
+                    muteBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>`;
+                }
+            }
+
+            toggleMute() {
+                this.isMuted = !this.isMuted;
+
+                if (this.isMuted) {
+                    this.previousVolume = this.masterVolume;
+                    this.masterVolume = 0;
+                    this.updateMuteButtonIcon(true);
+                } else {
+                    this.masterVolume = this.previousVolume;
+                    this.updateMuteButtonIcon(false);
+                }
+
+                this.sounds.forEach(sound => {
+                    sound.audio.volume = this.masterVolume;
+                });
+
+                document.getElementById('masterVolume').value = this.masterVolume * 100;
+            }
+
+            openTimerModal() {
+                document.getElementById('timerModal').classList.add('show');
+            }
+
+            startTimer() {
+                const activePreset = document.querySelector('.timer-preset.active');
+                
+                let minutes = 0;
+                if (activePreset) {
+                    minutes = parseInt(activePreset.dataset.minutes);
+                }
+
+                if (minutes > 0) {
+                    this.timerEndTime = Date.now() + (minutes * 60 * 1000);
+                    this.updateTimerDisplay();
+                    this.timerInterval = setInterval(() => this.updateTimerDisplay(), 1000);
+                    document.getElementById('timerModal').classList.remove('show');
+                    document.getElementById('timerBtn').classList.add('active');
+                }
+            }
+
+            updateTimerDisplay() {
+                const remaining = this.timerEndTime - Date.now();
+                
+                if (remaining <= 0) {
+                    this.stopAllSounds();
+                    this.cancelTimer();
+                    return;
+                }
+
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                const status = document.getElementById('timerStatus');
+                status.textContent = `Timer attivo: ${display}`;
+                status.classList.add('active');
+            }
+
+            cancelTimer() {
+                if (this.timerInterval) {
+                    clearInterval(this.timerInterval);
+                    this.timerInterval = null;
+                    this.timerEndTime = null;
+                    document.getElementById('timerStatus').textContent = '';
+                    document.getElementById('timerBtn').classList.remove('active');
+                }
+            }
+
+            stopAllSounds() {
+                this.sounds.forEach((sound, item) => {
+                    if (sound.playing) {
+                        sound.audio.pause();
+                        sound.audio.currentTime = 0;
+                        sound.circle.classList.remove('playing');
+                        sound.playing = false;
+                    }
+                });
+            }
+
+            toggleFullscreen() {
+                const fullscreenBtn = document.getElementById('fullscreenBtn');
+                
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().then(() => {
+                        fullscreenBtn.classList.add('active');
+                        fullscreenBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+                        </svg>`;
+                    });
+                } else {
+                    document.exitFullscreen().then(() => {
+                        fullscreenBtn.classList.remove('active');
+                        fullscreenBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                        </svg>`;
+                    });
+                }
+            }
+
+            toggleSound(item) {
+                const sound = this.sounds.get(item);
+                
+                if (sound.playing) {
+                    sound.audio.pause();
+                    sound.audio.currentTime = 0;
+                    sound.circle.classList.remove('playing');
+                    sound.playing = false;
+                } else {
+                    sound.audio.play().catch(err => {
+                        console.error('Error playing sound:', err);
+                    });
+                    sound.circle.classList.add('playing');
+                    sound.playing = true;
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createStarfield();
+            new SoundPlayer();
+        });
+    </script>
+</body>
+</html>
