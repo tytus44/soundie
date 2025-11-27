@@ -1,80 +1,45 @@
-# Soundie
+# Soundie 🌌
 
-Un'app ambient sound rilassante basata su browser con 20+ suoni naturali e urbani. Perfetto per concentrazione, meditazione, studio o semplicemente per rilassarsi.
+**Soundie** è un'applicazione web immersiva progettata per il relax, la concentrazione e lo studio. Offre una selezione curata di suoni ambientali che possono essere mixati tra loro per creare l'atmosfera perfetta, il tutto avvolto in un'interfaccia utente elegante con uno sfondo stellato animato.
 
-## ✨ Caratteristiche
+## ✨ Caratteristiche Principali
 
-- **20+ suoni ambientali**: Pioggia (leggera, forte, tuono, auto, ombrello), onde, fuoco, bosco, fiume, subacqueo, cavallo, rana, neve, treno, metro, bar, tastiera, macchina da scrivere, vinile, carta, lavanderia
-- **Controllo volume master**: Regolazione globale con slider verticale
-- **Timer programmabile**: 15 min, 30 min, 1 ora, 2 ore - stop automatico
-- **Fullscreen**: Modalità immersiva per concentrazione totale
-- **Pulsante muto**: Toggle veloce con memoria volume
-- **GIF animate**: Ogni suono ha un'icona animata associata
-- **Starfield dinamico**: Cielo stellato generato proceduralmente
-- **Design elegante**: Dark theme moderno con accenti cyan
-- **Tema responsive**: Adatto a desktop e mobile
+* **🎧 Mixer Ambientale:** Riproduzione simultanea di più tracce audio (pioggia, tuoni, onde, fuoco, ecc.) con controllo del volume globale.
+* **⏱️ Timer Intelligente:**
+    * Timer integrato per sessioni di focus (15m, 30m, 1h, 2h).
+    * Visualizzazione del countdown in tempo reale nella barra superiore.
+    * Design moderno con pulsanti stile "Pillow" (a pillola).
+    * Logica di stato (Imposta/Annulla) con feedback visivo.
+* **📱 Design Responsivo:**
+    * Layout a griglia adattivo: 4 colonne su schermi grandi, 2 su dispositivi mobili.
+    * Ottimizzato per desktop, tablet e smartphone.
+* **🎬 Intro Cinematografica:** Splash screen iniziale con animazioni CSS fluide che transiziona elegantemente verso l'applicazione principale.
+* **🎨 UI/UX Moderna:**
+    * Icone vettoriali minimaliste (libreria **Lucide**).
+    * Effetti di "glassmorphism" (sfocature e trasparenze).
+    * Feedback visivo al passaggio del mouse e al click (animazioni di rotazione, glow).
+    * Sfondo animato con campo stellare generato proceduralmente.
 
-## 🚀 Come usare
+## 🛠️ Tecnologie Utilizzate
 
-### Avvio
-1. Apri `index.html` per il loading screen (5 secondi)
-2. Oppure accedi direttamente a `soundie.html`
+* **HTML5:** Struttura semantica e accessibile.
+* **CSS3:** Flexbox, CSS Grid, Keyframe Animations, Gradienti e Media Queries.
+* **JavaScript (ES6+):** Programmazione a oggetti (classe `SoundPlayer`), gestione del DOM, logica del timer asincrona.
+* **Librerie Esterne:**
+    * [Lucide Icons](https://lucide.dev/) (per le icone vettoriali).
+    * [Google Fonts](https://fonts.google.com/) (Font "Pacifico" per i titoli).
 
-### Operazioni
-- **Riproduci suono**: Clicca su qualsiasi cerchio per avviare/fermare
-- **Regola volume**: Clicca l'icona altoparlante e usa lo slider
-- **Muto**: Clicca l'icona altoparlante per toggle muto
-- **Timer**: Clicca l'orologio, seleziona durata, premi "Imposta Timer"
-- **Fullscreen**: Clicca l'icona fullscreen (Esc per uscire)
+## 📂 Struttura del Progetto
 
-## 🎵 Suoni disponibili
+Il progetto è strutturato come una **Single Page Application (SPA)** contenuta in un unico file HTML principale, che gestisce sia l'intro che l'app vera e propria.
 
-**Pioggia**: Leggera, Forte, Tuono, Auto, Ombrello  
-**Natura**: Onde, Fuoco, Bosco, Fiume, Subacqueo, Cavallo, Rana, Neve  
-**Urbani**: Treno, Metro, Bar, Tastiera, Macchina da Scrivere, Vinile, Carta, Lavanderia
-
-## 🎨 Design
-
-- **Dark theme**: Gradiente blu-viola profondo (#0f0c29 → #24183f)
-- **Accent color**: Cyan (#6dd5ed)
-- **Font**: Pacifico per titolo, Segoe UI per UI
-- **Animazioni**: Rotazione ring per playing, twinkle stars, glow pulse
-
-## 🔊 Tecnica audio
-
-- Audio HTML5 con loop infinito
-- Volume master indipendente per ogni suono
-- Controllo tramite proprietà `.volume`
-- State management via classe `SoundPlayer`
-
-## ⚙️ Funzionalità avanzate
-
-**Timer intelligente**: 
-- Seleziona durata e premi "Imposta"
-- Display in tempo reale (mm:ss)
-- Stop automatico di tutti i suoni allo scadere
-- Stato attivo mostrato in status bar
-
-**Muto con memoria**:
-- Mantiene volume precedente
-- Icona aggiornata dinamicamente
-- Sincronizzazione slider
-
-**Fullscreen API**:
-- Richiesta completa fullscreen
-- Fallback per Safari (webkit)
-- Uscita pulita con Esc
-
-## 📱 Responsive
-
-- Desktop: Griglia 5 colonne
-- Tablet/Mobile: Griglia 2 colonne
-- Controlli adattivi (45px → 40px)
-
-## 🔒 Privacy
-
-Nessun dato inviato. Audio riprodotto localmente dal browser.
-
----
-
-Rilassati con Soundie. 🎵
+```text
+Soundie/
+│
+├── index.html          # Il file principale (HTML, CSS, JS unificati)
+├── README.md           # Documentazione del progetto
+└── sounds/             # Cartella contenente i file audio .mp3
+    ├── piogga-leggera.mp3
+    ├── pioggia-forte.mp3
+    ├── ... (altri suoni)
+    └── bar.mp3
